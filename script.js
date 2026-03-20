@@ -8,28 +8,26 @@ async function syncData() {
         // Split into lines
         const lines = csvText.split(/\r?\n/);
 
-        lines.forEach(line => {
-            // Split by comma, respecting quotes
-            const columns = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+        // We want the SECOND row (index 1) because the first row is your headers
+        if (lines.length >= 2) {
+            const dataRow = lines[1].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
             
-            if (columns.length >= 2) {
-                // Remove quotes and whitespace
-                const key = columns[0].replace(/^"|"$/g, '').trim(); 
-                const value = columns[1].replace(/^"|"$/g, '').trim(); 
-                
-                console.log(`Checking Sheet: Key="${key}" Value="${value}"`);
+            if (dataRow.length >= 2) {
+                const descriptionContent = dataRow[0].replace(/^"|"$/g, '').trim(); 
+                const explanationContent = dataRow[1].replace(/^"|"$/g, '').trim(); 
 
-                const element = document.getElementById(key);
-                if (element) {
-                    element.innerText = value;
-                    console.log(`✅ Success! Updated ID: ${key}`);
-                }
+                // Injecting directly by the IDs we know are in your HTML
+                document.getElementById('Description').innerText = descriptionContent;
+                document.getElementById('Explanation').innerText = explanationContent;
+                
+                console.log("✅ Data successfully pulled from Row 2!");
             }
-        });
+        }
         
         document.getElementById('status').innerText = "Sync Active!";
     } catch (err) {
         console.error("Error:", err);
+        document.getElementById('status').innerText = "Sync Error.";
     }
 }
 
