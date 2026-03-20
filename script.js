@@ -6,24 +6,31 @@ async function syncData() {
         const allRows = await response.json(); 
         const container = document.getElementById('data-container');
         
-        allRows.forEach(row => {
-            // Column A cell
-            const dCell = document.createElement('div');
-            dCell.className = 'cell';
-            dCell.innerText = row.description;
-            
-            // Column B cell
-            const eCell = document.createElement('div');
-            eCell.className = 'cell';
-            eCell.innerText = row.explanation;
-            
-            container.appendChild(dCell);
-            container.appendChild(eCell);
+        // Clear "Loading" text before adding rows
+        document.getElementById('status').innerText = "Processing " + allRows.length + " rows...";
+
+        allRows.forEach((row, index) => {
+            // Only add if at least one column has text
+            if (row.description || row.explanation) {
+                const dCell = document.createElement('div');
+                dCell.className = 'cell';
+                dCell.innerText = row.description || ""; // Use empty string if cell is null
+                
+                const eCell = document.createElement('div');
+                eCell.className = 'cell';
+                eCell.innerText = row.explanation || "";
+                
+                container.appendChild(dCell);
+                container.appendChild(eCell);
+            }
         });
         
-        document.getElementById('status').innerText = "Loaded " + allRows.length + " rows.";
+        document.getElementById('status').innerText = "Sync Active: " + allRows.length + " rows loaded.";
+        document.getElementById('status').style.color = "green";
     } catch (err) {
-        document.getElementById('status').innerText = "Error loading data.";
+        console.error("Connection error:", err);
+        document.getElementById('status').innerText = "Error: Could not read data from Google.";
+        document.getElementById('status').style.color = "red";
     }
 }
 
