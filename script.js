@@ -3,17 +3,27 @@ const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbyWSlKzWeC9dkjsS-
 async function syncData() {
     try {
         const response = await fetch(appsScriptUrl);
-        const data = await response.json(); 
+        const allRows = await response.json(); 
+        const container = document.getElementById('data-container');
         
-        // This takes the "description" and "explanation" from Row 2 of your sheet
-        document.getElementById('Description').innerText = data.description;
-        document.getElementById('Explanation').innerText = data.explanation;
+        allRows.forEach(row => {
+            // Column A cell
+            const dCell = document.createElement('div');
+            dCell.className = 'cell';
+            dCell.innerText = row.description;
+            
+            // Column B cell
+            const eCell = document.createElement('div');
+            eCell.className = 'cell';
+            eCell.innerText = row.explanation;
+            
+            container.appendChild(dCell);
+            container.appendChild(eCell);
+        });
         
-        document.getElementById('status').innerText = "Sync Live!";
-        document.getElementById('status').style.color = "green";
+        document.getElementById('status').innerText = "Loaded " + allRows.length + " rows.";
     } catch (err) {
-        console.error("Connection Error:", err);
-        document.getElementById('status').innerText = "Connection Failed. Refresh and try again.";
+        document.getElementById('status').innerText = "Error loading data.";
     }
 }
 
