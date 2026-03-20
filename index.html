@@ -1,13 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>FJ Sync Test</title>
+    <title>FJ Sheet Sync - Full List</title>
+    <style>
+        body { font-family: sans-serif; padding: 10px; background: #f9f9f9; }
+        .status { font-size: 11px; color: #888; margin-bottom: 10px; }
+        
+        /* This creates the side-by-side spreadsheet look */
+        #data-container { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 1px; 
+            background-color: #ccc; /* Border color */
+            border: 1px solid #ccc;
+            max-width: 100%;
+        }
+
+        .cell { 
+            background: white; 
+            padding: 6px; 
+            font-size: 12px; 
+            line-height: 1.3;
+            overflow-wrap: break-word;
+        }
+
+        .header-cell { 
+            background: #eee; 
+            font-weight: bold; 
+            text-align: center; 
+        }
+    </style>
 </head>
 <body>
-    <div id="status" style="color: green;">Connecting...</div>
+    <div id="status" class="status">Connecting...</div>
 
-    <h1 id="Description">Loading...</h1>
-    <p id="Explanation">Loading...</p>
+    <div id="data-container">
+        <div class="cell header-cell">Description</div>
+        <div class="cell header-cell">Explanation</div>
+        </div>
 
     <script src="script.js"></script>
 </body>
