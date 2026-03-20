@@ -5,33 +5,32 @@ async function syncData() {
         const response = await fetch(sheetUrl);
         const csvText = await response.text();
         
-        // Split by lines
-        const rows = csvText.split(/\r?\n/);
+        // Split into lines
+        const lines = csvText.split(/\r?\n/);
 
-        rows.forEach(row => {
-            // Regex to split by comma but ignore commas inside quotes
-            const columns = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+        lines.forEach(line => {
+            // Split by comma, respecting quotes
+            const columns = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
             
             if (columns.length >= 2) {
-                // Clean up the ID from Column A and the Content from Column B
-                const idFromSheet = columns[0].trim().replace(/^"|"$/g, ''); 
-                const valueFromSheet = columns[1].trim().replace(/^"|"$/g, ''); 
+                // Remove quotes and whitespace
+                const key = columns[0].replace(/^"|"$/g, '').trim(); 
+                const value = columns[1].replace(/^"|"$/g, '').trim(); 
                 
-                const target = document.getElementById(idFromSheet);
-                if (target) {
-                    target.innerText = valueFromSheet;
+                console.log(`Checking Sheet: Key="${key}" Value="${value}"`);
+
+                const element = document.getElementById(key);
+                if (element) {
+                    element.innerText = value;
+                    console.log(`✅ Success! Updated ID: ${key}`);
                 }
             }
         });
         
-        document.getElementById('status').innerText = "Sync Active: IDs Matched!";
-        document.getElementById('status').style.color = "green";
+        document.getElementById('status').innerText = "Sync Active!";
     } catch (err) {
-        console.error("Fetch error:", err);
-        document.getElementById('status').innerText = "Sync Failed. Check Internet/CORS.";
-        document.getElementById('status').style.color = "red";
+        console.error("Error:", err);
     }
 }
 
-// Start the sync immediately
 syncData();
