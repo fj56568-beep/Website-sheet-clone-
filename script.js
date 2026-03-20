@@ -1,37 +1,43 @@
-const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbyWSlKzWeC9dkjsS-oCHcbrSn3aB42ZmiMjQwFP3MHsKe1VGdECczyNz8V_V1S8qLFg/exec';
-
-async function syncData() {
-    try {
-        const response = await fetch(appsScriptUrl);
-        const allRows = await response.json(); 
-        const container = document.getElementById('data-container');
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FJ Spreadsheet View</title>
+    <style>
+        body { font-family: sans-serif; padding: 15px; background: #fdfdfd; }
+        .status { font-size: 11px; font-weight: bold; margin-bottom: 15px; color: #666; }
         
-        // Clear "Loading" text before adding rows
-        document.getElementById('status').innerText = "Processing " + allRows.length + " rows...";
+        #data-container { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; /* Side-by-side */
+            gap: 1px; 
+            background-color: #ddd; 
+            border: 1px solid #ddd;
+        }
 
-        allRows.forEach((row, index) => {
-            // Only add if at least one column has text
-            if (row.description || row.explanation) {
-                const dCell = document.createElement('div');
-                dCell.className = 'cell';
-                dCell.innerText = row.description || ""; // Use empty string if cell is null
-                
-                const eCell = document.createElement('div');
-                eCell.className = 'cell';
-                eCell.innerText = row.explanation || "";
-                
-                container.appendChild(dCell);
-                container.appendChild(eCell);
-            }
-        });
-        
-        document.getElementById('status').innerText = "Sync Active: " + allRows.length + " rows loaded.";
-        document.getElementById('status').style.color = "green";
-    } catch (err) {
-        console.error("Connection error:", err);
-        document.getElementById('status').innerText = "Error: Could not read data from Google.";
-        document.getElementById('status').style.color = "red";
-    }
-}
+        .cell { 
+            background: white; 
+            padding: 10px; 
+            font-size: 12px; /* Small size */
+            line-height: 1.4;
+            color: #333;
+        }
 
-syncData();
+        .header-cell { 
+            background: #f2f2f2; 
+            font-weight: bold; 
+            text-align: center; 
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div id="status" class="status">Connecting to Sheet...</div>
+
+    <div id="data-container">
+        <div class="cell header-cell">Description</div>
+        <div class="cell header-cell">Explanation</div>
+        </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
