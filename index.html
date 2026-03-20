@@ -5,9 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FJ Sheet Sync</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
-        .status { font-size: 0.8em; color: gray; margin-bottom: 20px; }
-        .data-box { border: 1px solid #ccc; padding: 15px; border-radius: 5px; max-width: 400px; }
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; background-color: #f4f4f9; }
+        .status { font-size: 0.8em; color: #888; margin-bottom: 20px; }
+        .data-box { 
+            background: white; 
+            border: 1px solid #ddd; 
+            padding: 25px; 
+            border-radius: 10px; 
+            max-width: 700px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        h2 { color: #2c3e50; margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        p { color: #555; font-size: 1.1em; white-space: pre-wrap; }
     </style>
 </head>
 <body>
@@ -15,8 +24,9 @@
     <div id="status" class="status">Connecting to Google Sheets...</div>
 
     <div class="data-box">
-        <h1 id="A1">Loading...</h1>
-        <p id="B1">Loading...</p>
+        <h2 id="Description">Loading Description...</h2>
+
+        <p id="explanation">Loading Explanation...</p>
     </div>
 
     <script src="script.js"></script>
