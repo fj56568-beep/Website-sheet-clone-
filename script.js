@@ -1,39 +1,19 @@
-const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQED-EyB9Sgt2f2AARIcSJnHTOHGYBEm0oF-wkB4LeH6pCwvr24iSKWe3en1LeJxvg4NuehOIlrBw1T/pub?gid=0&single=true&output=csv';
+const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbyWSlKzWeC9dkjsS-oCHcbrSn3aB42ZmiMjQwFP3MHsKe1VGdECczyNz8V_V1S8qLFg/exec';
 
 async function syncData() {
     try {
-        const response = await fetch(sheetUrl);
-        const csvText = await response.text();
+        const response = await fetch(appsScriptUrl);
+        const data = await response.json(); 
         
-        // Split by lines
-        const lines = csvText.split(/\r?\n/);
-
-        // lines[0] is Header (Row 1)
-        // lines[1] is Content (Row 2)
-        if (lines.length >= 2) {
-            // This regex handles the commas inside your long sentences
-            const dataRow = lines[1].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            
-            if (dataRow.length >= 2) {
-                // Remove quotes and clean up text
-                const colA_Content = dataRow[0].replace(/^"|"$/g, '').trim(); 
-                const colB_Content = dataRow[1].replace(/^"|"$/g, '').trim(); 
-
-                // Put the data into your HTML IDs
-                const descElement = document.getElementById('Description');
-                const explElement = document.getElementById('Explanation');
-
-                if (descElement) descElement.innerText = colA_Content;
-                if (explElement) explElement.innerText = colB_Content;
-                
-                console.log("✅ Row 2 content loaded successfully.");
-            }
-        }
+        // This takes the "description" and "explanation" from Row 2 of your sheet
+        document.getElementById('Description').innerText = data.description;
+        document.getElementById('Explanation').innerText = data.explanation;
         
-        document.getElementById('status').innerText = "Sync Active!";
+        document.getElementById('status').innerText = "Sync Live!";
+        document.getElementById('status').style.color = "green";
     } catch (err) {
-        console.error("Error:", err);
-        document.getElementById('status').innerText = "Sync Error. Check Sheet Publication.";
+        console.error("Connection Error:", err);
+        document.getElementById('status').innerText = "Connection Failed. Refresh and try again.";
     }
 }
 
