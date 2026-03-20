@@ -5,29 +5,35 @@ async function syncData() {
         const response = await fetch(sheetUrl);
         const csvText = await response.text();
         
-        // Split into lines
+        // Split by lines
         const lines = csvText.split(/\r?\n/);
 
-        // We want the SECOND row (index 1) because the first row is your headers
+        // lines[0] is Header (Row 1)
+        // lines[1] is Content (Row 2)
         if (lines.length >= 2) {
+            // This regex handles the commas inside your long sentences
             const dataRow = lines[1].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
             
             if (dataRow.length >= 2) {
-                const descriptionContent = dataRow[0].replace(/^"|"$/g, '').trim(); 
-                const explanationContent = dataRow[1].replace(/^"|"$/g, '').trim(); 
+                // Remove quotes and clean up text
+                const colA_Content = dataRow[0].replace(/^"|"$/g, '').trim(); 
+                const colB_Content = dataRow[1].replace(/^"|"$/g, '').trim(); 
 
-                // Injecting directly by the IDs we know are in your HTML
-                document.getElementById('Description').innerText = descriptionContent;
-                document.getElementById('Explanation').innerText = explanationContent;
+                // Put the data into your HTML IDs
+                const descElement = document.getElementById('Description');
+                const explElement = document.getElementById('Explanation');
+
+                if (descElement) descElement.innerText = colA_Content;
+                if (explElement) explElement.innerText = colB_Content;
                 
-                console.log("✅ Data successfully pulled from Row 2!");
+                console.log("✅ Row 2 content loaded successfully.");
             }
         }
         
         document.getElementById('status').innerText = "Sync Active!";
     } catch (err) {
         console.error("Error:", err);
-        document.getElementById('status').innerText = "Sync Error.";
+        document.getElementById('status').innerText = "Sync Error. Check Sheet Publication.";
     }
 }
 
