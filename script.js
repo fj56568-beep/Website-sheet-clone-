@@ -6,26 +6,27 @@ async function syncData() {
         const data = await response.json(); 
         
         const container = document.getElementById('content-list');
-        container.innerHTML = ""; // This removes the "Connecting..." text
+        container.innerHTML = ""; // This removes the "Connecting..." message
 
-        // This loop automatically builds a new section for EVERY row in your sheet
+        // This loop automatically handles 10 rows or 1000 rows
         data.forEach(item => {
             const wrapper = document.createElement('div');
-            wrapper.style.marginBottom = "20px";
+            wrapper.style.marginBottom = "30px";
             wrapper.style.padding = "10px";
             wrapper.style.borderBottom = "1px solid #eee";
 
-            // Description (Column A) - Bold and slightly larger
+            // Description (Column A)
             const d = document.createElement('div');
             d.style.fontWeight = "bold";
             d.style.fontSize = "16px";
+            d.style.color = "#000";
             d.innerText = item.description;
 
-            // Explanation (Column B) - Standard text
+            // Explanation (Column B)
             const e = document.createElement('div');
             e.style.fontSize = "14px";
-            e.style.color = "#444";
-            e.style.marginTop = "5px";
+            e.style.color = "#555";
+            e.style.marginTop = "8px";
             e.innerText = item.explanation;
 
             wrapper.appendChild(d);
@@ -33,12 +34,10 @@ async function syncData() {
             container.appendChild(wrapper);
         });
         
-        document.getElementById('status').innerText = "Sync Active: " + data.length + " rows loaded.";
-        document.getElementById('status').style.color = "green";
+        document.getElementById('status').innerText = "Sync Active: " + data.length + " items loaded.";
     } catch (err) {
-        console.error("Connection Error:", err);
-        document.getElementById('status').innerText = "Sync Failed. Please check Authorization.";
-        document.getElementById('status').style.color = "red";
+        console.error("Error:", err);
+        document.getElementById('status').innerText = "Sync Failed. Check browser console.";
     }
 }
 
