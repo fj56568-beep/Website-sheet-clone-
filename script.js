@@ -1,43 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>FJ Spreadsheet View</title>
-    <style>
-        body { font-family: sans-serif; padding: 15px; background: #fdfdfd; }
-        .status { font-size: 11px; font-weight: bold; margin-bottom: 15px; color: #666; }
+const appsScriptUrl = '
+https://script.google.com/macros/s/AKfycby1geIo_ItRjU5hkykrMUMA09srWgrpUsAkMzUedgJy7Ax36qTlqGIeZHXIcsBSv3J5/exec'; // The /exec link from Deployment
+
+async function syncData() {
+    try {
+        const response = await fetch(appsScriptUrl);
+        const data = await response.json(); 
         
-        #data-container { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; /* Side-by-side */
-            gap: 1px; 
-            background-color: #ddd; 
-            border: 1px solid #ddd;
-        }
+        // This targets your HTML IDs exactly
+        document.getElementById('Description').innerText = data.description;
+        document.getElementById('Explanation').innerText = data.explanation;
+        
+        document.getElementById('status').innerText = "Sync Live via Apps Script!";
+        document.getElementById('status').style.color = "green";
+    } catch (err) {
+        console.error("Error:", err);
+        document.getElementById('status').innerText = "Sync Failed. Check Script URL.";
+    }
+}
 
-        .cell { 
-            background: white; 
-            padding: 10px; 
-            font-size: 12px; /* Small size */
-            line-height: 1.4;
-            color: #333;
-        }
+syncData();
 
-        .header-cell { 
-            background: #f2f2f2; 
-            font-weight: bold; 
-            text-align: center; 
-            font-size: 13px;
-        }
-    </style>
-</head>
-<body>
-    <div id="status" class="status">Connecting to Sheet...</div>
 
-    <div id="data-container">
-        <div class="cell header-cell">Description</div>
-        <div class="cell header-cell">Explanation</div>
-        </div>
 
-    <script src="script.js"></script>
-</body>
-</html>
+
+
+
+
+
+
+
+
